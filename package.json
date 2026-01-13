@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "type": "module",
   "license": "MIT",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "dev": "NODE_ENV=development tsx index.ts",
     "build": "echo \"skip build\"",
     "start": "NODE_ENV=production tsx index.ts",
     "check": "tsc",
-  "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
