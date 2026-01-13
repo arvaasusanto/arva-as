@@ -1,8 +1,8 @@
 import express, { type Request, Response, NextFunction } from "express";
 // routes bisa mengekspor `registerRoutes` (named) atau default.
 // Supaya tidak error TS2305, kita support dua-duanya.
-import * as routesModule from "./routes";
-import { serveStatic } from "./static";
+import * as routesModule from "./routes.js";
+import { serveStatic } from "./static.js";
 import { createServer } from "http";
 
 const app = express();
@@ -90,7 +90,7 @@ async function initOnce() {
       if (process.env.NODE_ENV === "production") {
         serveStatic(app);
       } else {
-        const { setupVite } = await import("./vite");
+        const { setupVite } = await import("./vite.js");
         await setupVite(httpServer, app);
       }
 
