@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&family=JetBrains+Mono:wght@400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Paper-like background, ink-like text */
+  --background: 40 20% 98%;
+  --foreground: 0 0% 10%;
+  
+  /* Deep Academic Red / Gold Accents */
+  --primary: 355 70% 35%;
+  --primary-foreground: 40 20% 98%;
+  
+  --secondary: 40 10% 92%;
+  --secondary-foreground: 0 0% 10%;
+  
+  --muted: 40 10% 90%;
+  --muted-foreground: 0 0% 40%;
+  
+  --accent: 42 60% 50%; /* Gold/Bronze */
+  --accent-foreground: 0 0% 10%;
+  
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 0 0% 85%;
+  --input: 0 0% 85%;
+  --ring: 355 70% 35%;
+
+  --radius: 0rem; /* Sharp corners for serious feel */
+  
+  /* Fonts */
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+.dark {
+  /* Dark mode - sophisticated dark grey */
+  --background: 0 0% 8%;
+  --foreground: 40 10% 94%;
+  
+  --primary: 355 60% 45%;
+  --primary-foreground: 0 0% 98%;
+  
+  --secondary: 0 0% 15%;
+  --secondary-foreground: 40 10% 94%;
+  
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 60%;
+  
+  --accent: 42 50% 50%;
+  --accent-foreground: 0 0% 98%;
+  
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 0 0% 98%;
+  
+  --border: 0 0% 20%;
+  --input: 0 0% 20%;
+  --ring: 355 60% 45%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-sans);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+    @apply font-bold tracking-tight text-foreground;
+  }
+  p {
+    @apply leading-relaxed;
+  }
+}
+
+/* Custom drop cap class for article starts */
+.drop-cap::first-letter {
+  @apply float-left text-5xl font-bold pr-2 mt-[-4px] font-serif text-primary;
+  line-height: 0.8;
+}
+
+/* Elegant separator lines */
+.separator-gold {
+  @apply border-b border-accent/30;
+}
