@@ -1,5 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
-import { registerRoutes } from "./routes";
+// routes bisa mengekspor `registerRoutes` (named) atau default.
+// Supaya tidak error TS2305, kita support dua-duanya.
+import * as routesModule from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
 
@@ -39,9 +41,11 @@ app.use((req, res, next) => {
   let capturedJsonResponse: Record<string, any> | undefined;
 
   const originalResJson = res.json.bind(res);
-  res.json = function (bodyJson: any, ...args: any[]) {
+
+  // ✅ Hindari spread args agar tidak kena TS2556
+  res.json = function (bodyJson: any) {
     capturedJsonResponse = bodyJson;
-    return originalResJson(bodyJson, ...args);
+    return originalResJson(bodyJson);
   } as any;
 
   res.on("finish", () => {
@@ -66,13 +70,21 @@ async function initOnce() {
   if (inited) return;
   if (!initPromise) {
     initPromise = (async () => {
+      const registerRoutes =
+        (routesModule as any).registerRoutes ?? (routesModule as any).default;
+
+      if (typeof registerRoutes !== "function") {
+        throw new Error(
+          "routes module harus mengekspor fungsi `registerRoutes` (named) atau default export.",
+        );
+      }
+
       await registerRoutes(httpServer, app);
 
       app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
         const status = err?.status || err?.statusCode || 500;
         const message = err?.message || "Internal Server Error";
         if (!res.headersSent) res.status(status).json({ message });
-        // jangan throw di serverless
       });
 
       if (process.env.NODE_ENV === "production") {
@@ -88,7 +100,6 @@ async function initOnce() {
   await initPromise;
 }
 
-// ✅ Serverless handler untuk Vercel
 export default async function handler(req: any, res: any) {
   await initOnce();
   return app(req, res);
